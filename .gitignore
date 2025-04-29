@@ -1,0 +1,6 @@
+.idea/*
+test*
+config.json
+dist/*
+build/*
+malcore_playbook.egg-info/*
