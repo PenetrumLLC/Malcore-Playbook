@@ -4,3 +4,4 @@ config.json
 dist/*
 build/*
 malcore_playbook.egg-info/*
+*.pyc
