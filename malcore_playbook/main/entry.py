@@ -21,9 +21,10 @@ def main():
         settings.init(force=force)
         parser = cli.Parser().optparse()
 
-        if not parser.hide:
+        if not parser.hideBanner:
             print(settings.HEADER)
-        logger.info(f"Starting up at: {datetime.datetime.now()}")
+        if parser.noStartEnd:
+            logger.info(f"Starting up at: {datetime.datetime.now()}")
         if parser.viewRemote:
             _api = api.Api(only_remote=True)
             settings.display_recipes(_api.list_recipes())
@@ -88,7 +89,8 @@ def main():
                         )
                         output_results = settings.create_output(chain_results, output_file)
                         print(output_results)
-        logger.debug(f"Shutting down at: {datetime.datetime.now()}")
+        if parser.noStartEnd:
+            logger.debug(f"Shutting down at: {datetime.datetime.now()}")
     except KeyboardInterrupt:
         logger.fatal("User interrupted the program, shutting down")
     except Exception as e:

@@ -56,7 +56,7 @@ optional arguments:
 
 ```
 
-## MalScript
+## MalScript Overview
 
 MalScript is a scripting engine built specifically for the Malcore Playbook that allows users the ability to automate workflows. By chaining recipes together and executing recipes by condition MalScript provides a powerful workflow automation tool.
 
@@ -120,3 +120,16 @@ if int(182) in !emu.[0].entry_points.[0].instr_count then !exif=exec(exif-data);
 if str('exe') in !exif then !str=exec(strings);
 ret(!str.[0]);
 ```
+
+## Example Usage
+
+The help menu:
+![Help Menu](.github/assets/examples/help_menu.png)
+
+
+Downloading recipes:
+![Download Recipes](.github/assets/examples/download_recipes.png)
+
+
+Executing a recipe chain and saving it to a text file:
+![Download Recipes](.github/assets/examples/recipe_chain_saved.png)

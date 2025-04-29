@@ -61,9 +61,18 @@ class Parser(argparse.ArgumentParser):
             help="Key and value pairs to pass to the recipe IE: arg1=var1,arg2=var2"
         )
         parser.add_argument(
-            "--hide", action="store_true", help="Hide the banner"
+            "--hide", action="store_true", help="Hide the banner", dest="hideBanner"
+        )
+        parser.add_argument(
+            "--no-start-end", action="store_true", default=False, dest="noStartEnd",
+            help=argparse.SUPPRESS
         )
         parsed = parser.parse_args()
+
+
+        if parsed.viewLocal or parsed.viewRemote:
+            parsed.hideBanner = True
+            parser.noStartEnd = True
 
         kwargs_dict = {}
         for item in parsed.kwargs:

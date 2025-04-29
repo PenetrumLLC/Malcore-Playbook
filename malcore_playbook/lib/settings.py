@@ -350,11 +350,14 @@ def check_is_trial():
                 except Exception as e:
                     logger.error(f"Failed to remove trial file, got error: {str(e)}")
             else:
-                logger.info(
-                    f"You are currently on a premium trial membership! Your trial ends on: {trial_end_date}. "
-                    f"By using this trial you are accepting our Terms of Service: https://malcore.io/terms-of-use, "
-                    f"to upgrade your plan please see here: https://malcore.io/pricing"
-                )
+                already_said = f"{HOME}/.spoken"
+                if not os.path.exists(already_said):
+                    logger.info(
+                        f"You are currently on a premium trial membership! Your trial ends on: {trial_end_date}. "
+                        f"By using this trial you are accepting our Terms of Service: https://malcore.io/terms-of-use, "
+                        f"to upgrade your plan please see here: https://malcore.io/pricing"
+                    )
+                    open(already_said, "w").close()
                 return True
 
 
