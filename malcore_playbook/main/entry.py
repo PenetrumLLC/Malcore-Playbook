@@ -7,6 +7,7 @@ import malcore_playbook.lib.cli as cli
 import malcore_playbook.lib.settings as settings
 import malcore_playbook.lib.api as api
 import malcore_playbook.execution.recipe_exec as recipe_exec
+import malcore_playbook.malscript.parse as ms_parser
 
 
 logger = settings.logger
@@ -28,6 +29,11 @@ def main():
         if parser.viewRemote:
             _api = api.Api(only_remote=True)
             settings.display_recipes(_api.list_recipes())
+        elif parser.showVersions:
+            interp = ms_parser.MalScriptInterpreter(None)
+            print(f"Malcore Playbook version: {settings.VERSION}")
+            print(f"MalScript version: {interp.version}")
+            sys.exit(1)
         elif parser.viewLocal:
             files = [f"{settings.RECIPE_HOME}{os.path.sep}{f}" for f in os.listdir(settings.RECIPE_HOME)]
             if len(files) == 0:

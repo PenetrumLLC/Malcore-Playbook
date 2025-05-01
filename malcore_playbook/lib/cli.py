@@ -81,6 +81,10 @@ class Parser(argparse.ArgumentParser):
         misc_args.add_argument(
             "--hide", action="store_true", help="Hide the banner", dest="hideBanner"
         )
+        misc_args.add_argument(
+            "--version", action="store_true", help="Show version numbers and exit",
+            dest="showVersions"
+        )
 
         # Hidden args
         parser.add_argument(
@@ -89,7 +93,7 @@ class Parser(argparse.ArgumentParser):
         )
         parsed = parser.parse_args()
 
-        if parsed.viewLocal or parsed.viewRemote:
+        if parsed.viewLocal or parsed.viewRemote or parsed.showVersions:
             parsed.hideBanner = True
             parser.noStartEnd = True
 

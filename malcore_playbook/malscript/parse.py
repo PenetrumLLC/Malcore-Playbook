@@ -34,6 +34,7 @@ class MalScriptInterpreter(object):
         self.filename = filename
         self.kwargs = kwargs
         self.matcher = re.compile(r"if (.+?) in (.+?) then (.+)")
+        self.version = "1.0.0.0"
 
     def exec_command(self, command, line_no, line):
         """ executes the exec() built in """
