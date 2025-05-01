@@ -64,8 +64,18 @@ RECIPE-NAME   # Execute this recipe name
 ### Example Script
 
 ```malscript
-$emu=exec(dynamic-emulation);
-if int(182) in $emu.[0].entry_points.[0].instr_count then $exif=exec(exif-data);
-if str('exe') in $exif then $str=exec(strings);
-ret($str.[0]);
+# This is a comment that must also end with: ;
+# Will will set the variable $s to the output of executing the strings recipe ;
+$s=exec(strings);
+# If we find a string matching GetCurrentProcess in the strings output ;
+# We execute the threat-score recipe and assign the output to variable $t ;
+if str('GetCurrentProcess') in $s then $t=exec(threat-score);
+# We can access the exact score variable by using derreferencing with . ;
+# If 5.13 is in the JSON key score we will execute the AI classifier recipe ;
+if str('5.13') in $t.score then $a=exec(ai-class);
+# If the string safe is in the AI classifier output ;
+# We will execute the exif-data recipe and assign output to variable $e ;
+if str('safe') in $a then $e=exec(exif-data);
+# Then we will return the code_signature JSON variable from the exif-data output ;
+ret($e.code_signature);
 ```
