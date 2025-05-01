@@ -76,7 +76,7 @@ MalScript is a scripting engine built specifically for the Malcore Playbook that
   - Use to return a value from the script execution: `ret(!emu)`
 - `.`
   - Use to access data within a variable: `!emu.data.[1]`
-- ';'
+- `;`
   - Use to end a line, must be at the end of every line: `!emu=exec(dynamic-analysis);`
 
 ### Setting and Accessing Variables
