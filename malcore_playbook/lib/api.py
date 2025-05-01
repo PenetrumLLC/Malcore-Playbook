@@ -32,9 +32,6 @@ class Api(object):
             results = req.json()
         except:
             results = None
-        import json
-        with open('test.json', 'w') as fh:
-            json.dump(results, fh, indent=4)
         return results
 
     def list_recipes(self):
@@ -42,3 +39,10 @@ class Api(object):
         req = requests.get(url)
         data = req.json()
         return data
+
+    def status_check(self, uuid):
+        url = f"{self.api_url}/status"
+        data = {"uuid": uuid}
+        headers = {'apiKey': self.conf['api_key']}
+        req = requests.post(url, data=data, headers=headers)
+        return req.json()
