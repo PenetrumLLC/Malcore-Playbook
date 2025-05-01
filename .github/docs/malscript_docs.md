@@ -63,7 +63,7 @@ RECIPE-NAME   # Execute this recipe name
 
 ### Example Script
 
-```malscript
+```bash
 # This is a comment that must also end with: ;
 # Will will set the variable $s to the output of executing the strings recipe ;
 $s=exec(strings);
