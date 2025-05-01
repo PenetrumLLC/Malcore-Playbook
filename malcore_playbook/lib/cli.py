@@ -8,8 +8,11 @@ logger = settings.logger
 
 class Parser(argparse.ArgumentParser):
 
+    """ class placeholder for the argparse item """
+
     @staticmethod
     def optparse():
+        """ makes it easier to call from Parser().optparse() and looks nicer """
         parser = argparse.ArgumentParser()
 
         parser.usage = (f"malcore-playbook --recipe RECIPE[,RECIPE,..] --filename FILE "
@@ -93,10 +96,14 @@ class Parser(argparse.ArgumentParser):
         )
         parsed = parser.parse_args()
 
+        # if any of these are passed we will go ahead and hide the banner and prevent the
+        # startup and shutdown logging
         if parsed.viewLocal or parsed.viewRemote or parsed.showVersions:
             parsed.hideBanner = True
             parser.noStartEnd = True
 
+        # process KEY=VAL pairs from the --kwargs argument and put them into a dict
+        # for future use
         kwargs_dict = {}
         for item in parsed.kwargs:
             if "=" in item:

@@ -14,6 +14,7 @@ logger = settings.logger
 
 
 def main():
+    """ tie all of it together in a single pretty function """
     try:
         if "FORCE-RELOG" in sys.argv:
             force = True

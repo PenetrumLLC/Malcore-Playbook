@@ -19,10 +19,14 @@ import malcore_playbook.__version__ as version
 import requests
 
 
-class NoFilenameProvided(Exception): pass
+class NoFilenameProvided(Exception):
+    """ raise when there is no file provided """
+    pass
 
 
 class JsonLogFormatter(logging.Formatter):
+
+    """ export the log to a JSON format and log to a JSON file """
 
     def format(self, record):
         log_record = {
@@ -36,17 +40,28 @@ class JsonLogFormatter(logging.Formatter):
         return json.dumps(log_record)
 
 
+# home directory where all config files are stored
 HOME = f"{os.path.expanduser('~')}{os.path.sep}.mcpb"
+# this is where the recipes are stored
 RECIPE_HOME = f"{HOME}{os.path.sep}.recipes"
 # RECIPE_HOME = "test-plugins"
+# the config file that contains the API keys and what not
 CONFIG_FILE = f"{HOME}{os.path.sep}config.json"
+# the directory that will contain all the output results
 OUTPUT_DIR = f"{HOME}{os.path.sep}results"
+# did the user accept the eula?
 ACCEPTED_EULA = f"{HOME}{os.path.sep}.accepted"
+# what plan does the user have? this isn't used yet
 PLAN_FILE = f"{HOME}{os.path.sep}.user_plan"
+# backup plan file incase the plans differ
 BACKUP_USER_PLAN = f"{HOME}{os.path.sep}.backup_plan"
+# has the user download anything yet?
 HAS_INITIALIZED_DOWNLOADS = f"{HOME}{os.path.sep}.initialized_downloads"
+# version of the program
 VERSION = version.VERSION
+# program alias nick
 VERSION_ALIAS = version.VERSION_ALIAS
+# logo header
 HEADER = f"""
 \033[91m• ▌ ▄ ·. \033[0m ▄▄·  ▄▄▄·▄▄▄▄· 
 \033[91m·██ ▐███▪\033[0m▐█ ▌▪▐█ ▄█▐█ ▀█▪
@@ -55,6 +70,7 @@ HEADER = f"""
 \033[91m▀▀  █▪▀▀▀·\033[0m▀▀▀ .▀   ·▀▀▀▀  v{VERSION}({VERSION_ALIAS})
      Malcore-Playbook
 """
+# the eula
 EULA = """MALCORE PLAYBOOK END USER LICENSE AGREEMENT (EULA)
 
 1. LICENSE GRANT
@@ -98,6 +114,7 @@ NOTICE: Commercial use of Malcore Playbook without an active commercial license 
 
 
 def init(force=False):
+    """ initialization function that starts the init of the program """
     if force:
         print("Forcing config refactoring")
     if not os.path.exists(HOME) or force:
@@ -186,6 +203,7 @@ def init(force=False):
 
 
 def setup_logger(logger_name="MalcorePlaybook"):
+    """ logger setup """
     log_dir = f"{HOME}"
     if not os.path.exists(log_dir):
         init()
@@ -212,11 +230,13 @@ logger = setup_logger()
 
 
 def load_conf():
+    """ load the config file """
     with open(CONFIG_FILE, 'r') as fh:
         return json.load(fh)
 
 
 def display_recipes(recipes):
+    """ display the recipes passed in a pretty format """
     max_display_chars = 25
     col_width = 35
     s = f"{'Recipe:'.ljust(col_width)}{'Version'.ljust(col_width)}{'Author'}"
@@ -232,6 +252,7 @@ def display_recipes(recipes):
 
 
 def create_recipe_dict_from_local(local_files):
+    """ creates a dict from local recipe files"""
     recipes = []
     for file_ in local_files:
         if not any(p in file_ for p in ("__pycache__", "__init__.py")):
@@ -248,6 +269,7 @@ def create_recipe_dict_from_local(local_files):
 
 
 def download_recipe(recipe, full_data, force=False, show_output=True):
+    """ download the external recipes into the RECIPE directory """
     try:
         output_dir = f"{RECIPE_HOME}{os.path.sep}{recipe}.py"
         logger.info(f"Attempting to download recipe: {recipe} to {output_dir}")
@@ -279,10 +301,12 @@ def download_recipe(recipe, full_data, force=False, show_output=True):
 
 
 def load_recipes():
+    """ load all the local recipes """
     return os.listdir(RECIPE_HOME)
 
 
 def create_recipe_list_from_passed(passed):
+    """ create a list of files from loaded recipes """
     logger.debug(f"Creating recipe list from passed, total of {len(passed)} recipe(s) to process")
     results = []
     for recipe in passed:
@@ -291,6 +315,7 @@ def create_recipe_list_from_passed(passed):
 
 
 def hash_file(filename):
+    """ get the hash of a file """
     if isinstance(filename, list):
         filename = filename[0]
     with open(filename, 'rb') as fh:
@@ -300,6 +325,7 @@ def hash_file(filename):
 
 
 def create_output_file(output_type, filename, recipe):
+    """ creates a output file from the passed data """
     logger.debug(f"Creating output, passed type: {output_type}")
     file_hash = hash_file(filename)
     ext = output_type.lower()
@@ -317,6 +343,7 @@ def create_output_file(output_type, filename, recipe):
 
 
 def create_output(output_results, output_file):
+    """ creates the file that the output will be stored in """
     if output_file.endswith(".json"):
         output = json_writer.output(output_results, output_file)
     elif output_file.endswith("pdf"):
@@ -331,10 +358,12 @@ def create_output(output_results, output_file):
 
 
 def get_user_plan():
+    """ get the plan the user is currently using """
     return open(PLAN_FILE).read()
 
 
 def user_can_use_recipe(allowed):
+    """ can the user execute the passed recipe? """
     user_plan = get_user_plan()
     if check_is_trial():
         return True
@@ -347,6 +376,7 @@ def user_can_use_recipe(allowed):
 
 
 def check_is_trial():
+    """ is the user under the trial? """
     trial_file = f"{HOME}/.trial"
     if not os.path.exists(trial_file):
         return False
@@ -386,6 +416,7 @@ def check_is_trial():
 
 
 def execute_chain(script, filename, **kwargs):
+    """ execute the MalScript """
     if os.path.exists(script):
         exec_script = open(script).read()
     else:
@@ -394,6 +425,7 @@ def execute_chain(script, filename, **kwargs):
 
 
 def download_all_recipes(only_list=False):
+    """ download all external recipes """
     percent = lambda part, whole: round((part / whole) * 100, 2)
     _api = api.Api(only_remote=True)
     data = _api.list_recipes()
@@ -410,6 +442,7 @@ def download_all_recipes(only_list=False):
 
 
 def check_for_recipe_updates(force_download=False):
+    """ check if any of the local recipes need to be updated from the external source """
     import malcore_playbook.execution.recipe_exec as recipe_exec
 
     updates_needed = []

@@ -5,6 +5,8 @@ import requests
 
 class Api(object):
 
+    """ malcore API object """
+
     def __init__(self, only_remote=False):
         self.api_url = "https://api.malcore.io/api"
         self.auth_url = "https://api.malcore.io/auth"
@@ -15,6 +17,7 @@ class Api(object):
             self.conf = {}
 
     def upload_file(self, filename, endpoint):
+        """ uploada file to an endpoint """
         url = f"{self.api_url}/{endpoint}"
         files = {'filename1': open(filename, 'rb')}
         headers = {'apiKey': self.conf['api_key']}
@@ -25,6 +28,7 @@ class Api(object):
             return None
 
     def login(self, username, password):
+        """ login to the API to get the user API key and auth tokens """
         post_data = {"email": username, "password": password}
         url = f"{self.auth_url}/login"
         try:
@@ -35,12 +39,14 @@ class Api(object):
         return results
 
     def list_recipes(self):
+        """ gather a list of all available recipes """
         url = "https://recipes.malcore.io/assets/dbs/files.json"
         req = requests.get(url)
         data = req.json()
         return data
 
     def status_check(self, uuid):
+        """ check the status of executable file analysis """
         url = f"{self.api_url}/status"
         data = {"uuid": uuid}
         headers = {'apiKey': self.conf['api_key']}

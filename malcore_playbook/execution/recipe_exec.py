@@ -5,6 +5,7 @@ import malcore_playbook.lib.settings as settings
 
 
 def load_recipe(recipes, load_one=False, speak=True):
+    """ import the loaded recipes """
     loaded = []
     for recipe in recipes:
         if speak:
@@ -44,6 +45,7 @@ def load_recipe(recipes, load_one=False, speak=True):
 
 
 def execute_recipe(recipe, *args, **kwargs):
+    """ execute the loaded recipes and start processing them """
     settings.logger.info(f"Attempting to execute recipe: {recipe}")
     try:
         results = recipe.plugin(*args, **kwargs)
@@ -51,7 +53,5 @@ def execute_recipe(recipe, *args, **kwargs):
             settings.logger.debug(f"Recipe executed successfully returning results")
         return results
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         settings.logger.error(f"Unable to execute recipe, got error: {str(e)}")
         return None
