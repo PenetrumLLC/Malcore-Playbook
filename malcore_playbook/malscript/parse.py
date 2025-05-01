@@ -64,7 +64,7 @@ class MalScriptInterpreter(object):
 
     def resolve_var_path(self, var_path):
         """
-        Resolves variables with nested dict/list access like !emu.[0].entry_points.[1].apis
+        Resolves variables with nested dict/list access like $emu.[0].entry_points.[1].apis
         """
         parts = re.split(r'\.\[|\]|\.', var_path)
         parts = [p for p in parts if p not in ('', None)]
@@ -143,7 +143,7 @@ class MalScriptInterpreter(object):
         """ parses the lines of the script """
         line_no = str(line_no)
         line = line.strip()
-        if line.startswith('!') and '=' in line:
+        if line.startswith('$') and '=' in line:
             settings.logger.debug(f"Found variable in script, parsing variable, line_no: {line_no}")
             var_name, value = line.split('=', 1)
             var_name = var_name.strip()
@@ -163,10 +163,10 @@ class MalScriptInterpreter(object):
                 if isinstance(condition_value, str):
                     condition_value = condition_value.replace("'", "").replace('"', "")
                 var_name = var_name.strip()
-                if var_name.startswith('!'):
+                if var_name.startswith('$'):
                     var_name = var_name
                 else:
-                    var_name = '!' + var_name
+                    var_name = '$' + var_name
                 then_part = then_part.strip()
                 if "." in var_name:
                     self.get_nested_variables(var_name, condition_value, then_part, line_no)
@@ -184,10 +184,10 @@ class MalScriptInterpreter(object):
         elif line.startswith('ret'):
             settings.logger.debug(f"Found return statement on line_no: {line_no}, parsing return")
             var_name = line.split("(")[1].split(")")[0].strip()
-            if var_name.startswith('!'):
+            if var_name.startswith('$'):
                 var_name = var_name
             else:
-                var_name = '!' + var_name
+                var_name = '$' + var_name
             if "." in var_name:
                 return self.get_nested_variables(var_name, None, None, line_no, is_from_ret=True)
             else:
