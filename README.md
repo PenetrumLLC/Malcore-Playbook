@@ -58,9 +58,7 @@ optional arguments:
 
 <p align="center" width="100%"><img height="201" width="474" src=".github/assets/logos/malscript_logo.png"/></p>
 
-MalScript is a scripting language built specifically for the Malcore Playbook that allows users the ability to automate workflows. By chaining recipes together and executing recipes by condition MalScript provides a powerful workflow automation tool. 
-
-MalScript is a domain-specific scripting language (DSL) designed to provide the ability to perform declarative workflows, malware analysis, and triage automation.
+MalScript is a domain-specific scripting language (DSL) built specifically for the Malcore Playbook. This language is designed to automate malware analysis and automate triaging workflows. By providing the ability to chain recipes and execute them conditionally, MalScript provides a powerful declarative automation to help automate reverse engineers and analysts. MalScript combines function and imperative elements to support rule-based execution, and data inspection on real-time analysis results.
 
 Language type breakdown:
 
