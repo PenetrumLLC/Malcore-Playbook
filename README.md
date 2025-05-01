@@ -12,9 +12,7 @@ Key Features:
 - Full integration with Malcore's API
 - Built for performance, flexibility, and deep analysis insights
 
-Malcore Playbook: Automate the Hunt. Understand the Enemy.
-
-#### Installation
+## Installation
 
 For now, you will have to perform a manual installation like so:
 

@@ -11,30 +11,46 @@ class Parser(argparse.ArgumentParser):
     @staticmethod
     def optparse():
         parser = argparse.ArgumentParser()
-        parser.add_argument(
+
+        parser.usage = (f"malcore-playbook --recipe RECIPE[,RECIPE,..] --filename FILE "
+                        "[--chain --script [SCRIPT] "
+                        "--kwargs ARG1=VAL1[,ARG2=VAL2,...]]")
+
+        required = parser.add_argument_group("required arguments")
+        required.add_argument(
             "-r", "--recipe", nargs="+", metavar="RECIPE-NAME",
-            help="Pass a recipe name to begin the recipe execution, pass multiple with commas IE: recipe1,recipe2,...",
+            help="Recipes to execute one at a time, pass multiple using a comma seperated list ("
+                 "eg, recipe1,recipe2,...)",
             default=None, dest="useRecipe"
         )
-        parser.add_argument(
+        required.add_argument(
             "-c", "--chain", action="store_true",
             dest="useChain", default=False,
-            help=argparse.SUPPRESS
+            help="Pass this to chain recipes together with a script, must pass the --script flag with this"
         )
-        parser.add_argument(
+        required.add_argument(
+            "--filename", "-f", "--file-to-analyze", nargs=1, default=None,
+            help="The filename that you want to process with the recipes. This is required for the recipes to work",
+            dest="filename"
+        )
+
+        chain_flags = parser.add_argument_group("chain related arguments")
+        chain_flags.add_argument(
             "--chain-script", "-S", "--script", "-C", metavar="CHAIN-SCRIPT",
             dest="chainScript", default=None,
-            help="Pass either a filename or a chain script"
+            help="Pass either a filename or a raw chain script in order to execute the MalScript chain"
         )
-        parser.add_argument(
+
+        recipe_args = parser.add_argument_group("recipe related arguments")
+        recipe_args.add_argument(
             "--list-remote", "--list-remote-recipes", "-lR", action="store_true", default=False,
             help="List all remote recipes that are available for download", dest="viewRemote"
         )
-        parser.add_argument(
+        recipe_args.add_argument(
             "--list-local", "--list-local-recipes", "-lL", action="store_true", default=False,
             help="List all local recipes that are available to execute", dest="viewLocal"
         )
-        parser.add_argument(
+        recipe_args.add_argument(
             "--download-remote", "--download-recipe", "--download", "-D",
             nargs="+", metavar="RECIPE-NAME", default=None,
             help="Pass a remote recipe name to download it to your recipe folder ("
@@ -42,31 +58,31 @@ class Parser(argparse.ArgumentParser):
                  ")",
             dest="downloadRecipe"
         )
-        parser.add_argument(
+        recipe_args.add_argument(
+            "--recipe-updates", metavar="ACTION", help="Check for recipe updates",
+            dest="checkRecipeUpdates", default=None, choices=["check", "download"]
+        )
+        recipe_args.add_argument(
+            "--kwargs", dest="kwargs", nargs="*", default={},
+            help="Key and value pairs to pass to the recipe IE: arg1=var1,arg2=var2"
+        )
+
+        misc_args = parser.add_argument_group("misc arguments")
+        misc_args.add_argument(
             "--force", action="store_true", default=False,
             help="Force actions that would otherwise fail", dest="forceAction"
         )
-        parser.add_argument(
+        misc_args.add_argument(
             "--output", "-O", "--output-type",
             default="json", choices=["json", "pdf", "txt", "console"],
             metavar="OUTPUT-TYPE", dest="outputType",
             help=f"Pass to control the type of output you want, default is JSON files stored in: {settings.HOME}"
         )
-        parser.add_argument(
-            "--filename", "-f", "--file-to-analyze", nargs=1, default=None,
-            help="Filename for the recipes to process", dest="filename"
-        )
-        parser.add_argument(
-            "--kwargs", dest="kwargs", nargs="*", default={},
-            help="Key and value pairs to pass to the recipe IE: arg1=var1,arg2=var2"
-        )
-        parser.add_argument(
+        misc_args.add_argument(
             "--hide", action="store_true", help="Hide the banner", dest="hideBanner"
         )
-        parser.add_argument(
-            "--recipe-updates", metavar="ACTION", help="Check for recipe updates",
-            dest="checkRecipeUpdates", default=None, choices=["check", "download"]
-        )
+
+        # Hidden args
         parser.add_argument(
             "--no-start-end", action="store_true", default=False, dest="noStartEnd",
             help=argparse.SUPPRESS
