@@ -102,62 +102,83 @@ def init(force=False):
         print("Forcing config refactoring")
     if not os.path.exists(HOME) or force:
         try:
-            os.makedirs(HOME)
-            os.makedirs(RECIPE_HOME)
-        except:
-            pass
-        print(
-            "You will need to accept out EULA before you begin, you will only see this once, "
-            "you can find our terms of service here: https://malcore.io/terms-of-use"
-        )
-        print(f"\n{EULA}\n")
-        is_accepted = False
-        acceptable_answers = ('yes', 'no')
-        while not is_accepted:
-            answer = input("To accept type 'yes' to decline type 'no': ").strip()
-            if answer.lower() not in list(acceptable_answers):
-                logger.warning("Please type 'yes' or 'no'")
-            elif answer.lower() == 'yes':
-                open(ACCEPTED_EULA, "a+").write(f"Accepted on: {datetime.datetime.utcnow().isoformat()} UTC")
-                is_accepted = True
-            else:
-                print("You have declined the EULA, this program will now exit")
-                os.remove(HOME)
-                return
-        trial_file = f"{HOME}/.trial"
-        with open(trial_file, "w") as fh:
-            json.dump({"trial_end_date": int(time.time())}, fh)
-        with open(PLAN_FILE, "w") as fh:
-            fh.write("*")
-        print("A free 30 day trial has been activated for you!")
-        with open(CONFIG_FILE, 'w') as fh:
+            try:
+                os.makedirs(HOME)
+                os.makedirs(RECIPE_HOME)
+            except:
+                pass
             print(
-                "You will need to login to start using the Malcore Playbook. If you do not have an account "
-                "please make one here: https://app.malcore.io/register"
+                "You will need to accept out EULA before you begin, you will only see this once, "
+                "you can find our terms of service here: https://malcore.io/terms-of-use"
             )
-            api_ = api.Api(only_remote=True)
-            entered = False
-            while not entered:
-                username = input("Enter your email: ")
-                password = getpass.getpass("Enter your password: ")
-                if username == "" or password == "":
-                    print("Please enter your credentials")
+            print(f"\n{EULA}\n")
+            is_accepted = False
+            acceptable_answers = ('yes', 'no')
+            while not is_accepted:
+                answer = input("To accept type 'yes' to decline type 'no': ").strip()
+                if answer.lower() not in list(acceptable_answers):
+                    logger.warning("Please type 'yes' or 'no'")
+                elif answer.lower() == 'yes':
+                    open(ACCEPTED_EULA, "a+").write(f"Accepted on: {datetime.datetime.utcnow().isoformat()} UTC")
+                    is_accepted = True
                 else:
-                    data = api_.login(username, password)
-                    key = data['data']['user']['apiKey']
-                    user_plan = data['data']['user']['subscription']['name']
-                    plan_id = data['data']['user']['subscription']['planId']
-                    file_size_limit = data['data']['user']['subscription']['fileSizeLimit']
-                    entered = True
-            key = key.strip()
-            json.dump({"api_key": key, "plan_id": plan_id, "file_size_limit": file_size_limit}, fh)
-            with open(BACKUP_USER_PLAN, 'w') as fh1:
-                fh1.write(user_plan)
-            if force:
-                print("Config refactored successfully, you will need to rerun the program to start")
-            else:
-                print("Initialization completed, you will need to rerun the program to start")
-        exit(1)
+                    print("You have declined the EULA, this program will now exit")
+                    os.remove(HOME)
+                    return
+            trial_file = f"{HOME}/.trial"
+            with open(trial_file, "w") as fh:
+                json.dump({"trial_end_date": int(time.time())}, fh)
+            with open(PLAN_FILE, "w") as fh:
+                fh.write("*")
+            print("A free 30 day trial has been activated for you!")
+            with open(CONFIG_FILE, 'w') as fh:
+                print(
+                    "You will need to login to start using the Malcore Playbook. If you do not have an account "
+                    "please make one here: https://app.malcore.io/register"
+                )
+                api_ = api.Api(only_remote=True)
+                entered = False
+                while not entered:
+                    username = input("Enter your email: ")
+                    password = getpass.getpass("Enter your password: ")
+                    if username == "" or password == "":
+                        print("Please enter your credentials")
+                    else:
+                        data = api_.login(username, password)
+                        if data['data'] is None:
+                            print("Got error while trying to login:")
+                            for warning in data['messages']:
+                                print(f"Type: {warning['type']} Message: {warning['message']}")
+                            print("Please try again")
+                        else:
+                            key = data['data']['user']['apiKey']
+                            user_plan = data['data']['user']['subscription']['name']
+                            plan_id = data['data']['user']['subscription']['planId']
+                            file_size_limit = data['data']['user']['subscription']['fileSizeLimit']
+                            entered = True
+                key = key.strip()
+                json.dump({"api_key": key, "plan_id": plan_id, "file_size_limit": file_size_limit}, fh)
+                with open(BACKUP_USER_PLAN, 'w') as fh1:
+                    fh1.write(user_plan)
+                if force:
+                    print("Config refactored successfully, you will need to rerun the program to start")
+                else:
+                    print("Initialization completed, you will need to rerun the program to start")
+            exit(1)
+        except KeyboardInterrupt:
+            print("User quit install, removing home directory")
+            try:
+                os.remove(HOME)
+            except:
+                print(f"Failed to remove home directory do so manually: {HOME}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Caught error: {str(e)}, please start the program again")
+            try:
+                os.remove(HOME)
+            except:
+                print(f"Failed to remove the HOME directory to restart install, do so manually: {HOME}")
+            sys.exit(1)
     else:
         check_is_trial()
         with open(CONFIG_FILE, 'r') as fh:
