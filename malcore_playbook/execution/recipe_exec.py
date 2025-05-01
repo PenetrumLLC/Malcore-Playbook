@@ -4,31 +4,35 @@ import sys
 import malcore_playbook.lib.settings as settings
 
 
-def load_recipe(recipes, load_one=False):
+def load_recipe(recipes, load_one=False, speak=True):
     loaded = []
     for recipe in recipes:
-        try:
-            settings.logger.info(f"Attempting to load recipe: {recipe.__name__}")
-        except:
-            settings.logger.info("Attempting to load recipe")
+        if speak:
+            try:
+                settings.logger.info(f"Attempting to load recipe: {recipe.__name__}")
+            except:
+                settings.logger.info("Attempting to load recipe")
         recipe_home = settings.RECIPE_HOME
         full_path = os.path.join(recipe_home, recipe)
         path, fname = os.path.split(full_path)
         modulename, _ = os.path.splitext(fname)
         if path not in sys.path:
-            settings.logger.debug("Path not found in sys.path adding to it")
+            if speak:
+                settings.logger.debug("Path not found in sys.path adding to it")
             sys.path.insert(0, path)
         try:
             imported_mod = __import__(modulename)
             if settings.user_can_use_recipe(imported_mod.__excluded_plans__):
                 loaded.append(__import__(modulename))
             else:
-                settings.logger.warning(
-                    f"Your plan does not allow usage of recipe: {recipe}, "
-                    f"to upgrade your plan see here: https://malcore.io/pricing"
-                )
+                if speak:
+                    settings.logger.warning(
+                        f"Your plan does not allow usage of recipe: {recipe}, "
+                        f"to upgrade your plan see here: https://malcore.io/pricing"
+                    )
         except Exception as e:
-            settings.logger.error(f"Cannot import recipe: {recipe}, hit error: {str(e)}")
+            if speak:
+                settings.logger.error(f"Cannot import recipe: {recipe}, hit error: {str(e)}")
     if len(loaded) != 0:
         if load_one:
             return loaded[0]

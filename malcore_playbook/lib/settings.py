@@ -372,11 +372,13 @@ def execute_chain(script, filename, **kwargs):
     return chain_script.run(exec_script, filename, kwargs)
 
 
-def download_all_recipes():
+def download_all_recipes(only_list=False):
     percent = lambda part, whole: round((part / whole) * 100, 2)
     _api = api.Api(only_remote=True)
     data = _api.list_recipes()
     total_recipes = len(data)
+    if only_list:
+        return data
     total_downloaded = 0
     for recipe in data:
         is_successful = download_recipe(recipe['filename'].split(".")[0], recipe, force=True)
@@ -384,3 +386,34 @@ def download_all_recipes():
             total_downloaded += 1
     open(HAS_INITIALIZED_DOWNLOADS, "a+").close()
     logger.info(f"Downloaded {total_downloaded} recipes out of {total_recipes} ({percent(total_downloaded, total_recipes)}%)")
+
+
+def check_for_recipe_updates(force_download=False):
+    import malcore_playbook.execution.recipe_exec as recipe_exec
+
+    updates_needed = []
+    total_needed = 0
+
+    if force_download:
+        logger.debug("Will be downloading all recipes that need to be updated automatically")
+
+    downloaded_recipes = load_recipes()
+    remote_recipes = download_all_recipes(only_list=True)
+    imported_recipes = recipe_exec.load_recipe(downloaded_recipes, speak=False)
+    local_recipes = [[i.__hashsum__, i.__file__.split(os.path.sep)[-1]] for i in imported_recipes]
+    for remote_recipe in remote_recipes:
+        for local_recipe in local_recipes:
+            if local_recipe[1] == remote_recipe['filename']:
+                if not local_recipe[0] == remote_recipe['hashsum']:
+                    total_needed += 1
+                    logger.warning(
+                        f"Recipe: {local_recipe[1]} has an update available to version: {remote_recipe['version']}"
+                    )
+                    updates_needed.append(local_recipe[1])
+                    if force_download:
+                        download_recipe(remote_recipe['filename'].split(".")[0], remote_recipe, force=True)
+    if len(updates_needed) == 0:
+        logger.info("There are no recipes that need to be updated")
+    else:
+        logger.warning(f"There are a total of {total_needed} recipe(s) that require an update")
+

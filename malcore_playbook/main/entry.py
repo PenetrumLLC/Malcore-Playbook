@@ -35,6 +35,10 @@ def main():
             else:
                 dict_ = settings.create_recipe_dict_from_local(files)
                 settings.display_recipes(dict_)
+        elif parser.checkRecipeUpdates is not None:
+            choice = parser.checkRecipeUpdates
+            logger.info(f"Starting to check for recipe updates, action taken: {choice}")
+            settings.check_for_recipe_updates(force_download=True if choice == "download" else False)
         elif parser.downloadRecipe:
             _api = api.Api(only_remote=True)
             recipes = _api.list_recipes()

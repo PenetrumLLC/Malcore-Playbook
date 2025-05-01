@@ -64,11 +64,14 @@ class Parser(argparse.ArgumentParser):
             "--hide", action="store_true", help="Hide the banner", dest="hideBanner"
         )
         parser.add_argument(
+            "--recipe-updates", metavar="ACTION", help="Check for recipe updates",
+            dest="checkRecipeUpdates", default=None, choices=["check", "download"]
+        )
+        parser.add_argument(
             "--no-start-end", action="store_true", default=False, dest="noStartEnd",
             help=argparse.SUPPRESS
         )
         parsed = parser.parse_args()
-
 
         if parsed.viewLocal or parsed.viewRemote:
             parsed.hideBanner = True
