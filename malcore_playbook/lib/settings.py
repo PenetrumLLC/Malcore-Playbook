@@ -44,6 +44,7 @@ OUTPUT_DIR = f"{HOME}{os.path.sep}results"
 ACCEPTED_EULA = f"{HOME}{os.path.sep}.accepted"
 PLAN_FILE = f"{HOME}{os.path.sep}.user_plan"
 BACKUP_USER_PLAN = f"{HOME}{os.path.sep}.backup_plan"
+HAS_INITIALIZED_DOWNLOADS = f"{HOME}{os.path.sep}.initialized_downloads"
 VERSION = version.VERSION
 VERSION_ALIAS = version.VERSION_ALIAS
 HEADER = f"""
@@ -314,6 +315,8 @@ def get_user_plan():
 
 def user_can_use_recipe(allowed):
     user_plan = get_user_plan()
+    if check_is_trial():
+        return True
     if allowed is None:
         return True
     else:
@@ -379,4 +382,5 @@ def download_all_recipes():
         is_successful = download_recipe(recipe['filename'].split(".")[0], recipe, force=True)
         if is_successful:
             total_downloaded += 1
+    open(HAS_INITIALIZED_DOWNLOADS, "a+").close()
     logger.info(f"Downloaded {total_downloaded} recipes out of {total_recipes} ({percent(total_downloaded, total_recipes)}%)")

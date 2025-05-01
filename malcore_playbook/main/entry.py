@@ -48,6 +48,11 @@ def main():
                             settings.download_recipe(selected, recipe, force=parser.forceAction)
             logger.info("Finished processing all acceptable recipes")
         else:
+            if not os.path.exists(settings.HAS_INITIALIZED_DOWNLOADS):
+                settings.logger.warning(
+                    "You have not downloaded all the currently available recipes, "
+                    "please use --download-remote all flag to download them"
+                )
             if parser.useRecipe is not None:
                 logger.debug("Checking if passed recipe is available in current recipe list")
                 available_recipes = settings.load_recipes()

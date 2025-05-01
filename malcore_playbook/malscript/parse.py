@@ -85,6 +85,60 @@ class MalScriptInterpreter(object):
 
         return value
 
+    def get_nested_variables(self, var_name, condition_value, then_part, line_no, **kwargs):
+        """ find nested variables data from the script """
+        is_from_ret = kwargs.get("is_from_ret", False)
+
+        if not is_from_ret:
+            parts = var_name.split(".")
+            var_name = parts[0]
+            if var_name not in self.variables:
+                raise ScriptParserError(f"Requested variable: {var_name} not found, line_no: {line_no}", -1)
+            data = self.variables[var_name]
+            keys = parts[1:]
+            for key in keys:
+                if key.startswith("["):
+                    try:
+                        index_number = int(key.split("[")[1].split("]")[0])
+                        data = data[index_number]
+                    except:
+                        raise ScriptSyntaxError(f"Invalid index for variable: {var_name}, line_no: {line_no}",
+                                                -2)
+                else:
+                    if key in data.keys():
+                        data = data.get(key)
+                    else:
+                        raise ScriptSyntaxError(f"Invalid variable: {var_name}, line_no: {line_no}", -2)
+            var_value = data
+            if isinstance(var_value, list):
+                if any(condition_value == item for item in var_value):
+                    self.parse_value(then_part, line_no)
+            else:
+                if isinstance(condition_value, int):
+                    if condition_value == var_value:
+                        self.parse_line(then_part, line_no)
+                else:
+                    if condition_value in str(var_value):
+                        self.parse_line(then_part, line_no)
+        else:
+            parts = var_name.split(".")
+            var_name = parts[0]
+            keys = parts[1:]
+            data = self.variables[var_name]
+            for key in keys:
+                if key.startswith("["):
+                    try:
+                        index_number = int(key.split("[")[1].split("]")[0])
+                        data = data[index_number]
+                    except:
+                        raise ScriptSyntaxError(f"Invalid index for variable: {var_name}, line_no: {line_no}", -2)
+                else:
+                    if key in data.keys():
+                        data = data.get(key)
+                    else:
+                        raise ScriptSyntaxError(f"Invalid variable: {var_name}, line_no: {line_no}", -2)
+            return data
+
     def parse_line(self, line, line_no):
         """ parses the lines of the script """
         line_no = str(line_no)
@@ -115,36 +169,7 @@ class MalScriptInterpreter(object):
                     var_name = '!' + var_name
                 then_part = then_part.strip()
                 if "." in var_name:
-                    parts = var_name.split(".")
-                    var_name = parts[0]
-                    if var_name not in self.variables:
-                        raise ScriptParserError(f"Requested variable: {var_name} not found, line_no: {line_no}", -1)
-                    data = self.variables[var_name]
-                    keys = parts[1:]
-                    for key in keys:
-                        if key.startswith("["):
-                            try:
-                                index_number = int(key.split("[")[1].split("]")[0])
-                                data = data[index_number]
-                            except:
-                                raise ScriptSyntaxError(f"Invalid index for variable: {var_name}, line_no: {line_no}",
-                                                        -2)
-                        else:
-                            if key in data.keys():
-                                data = data.get(key)
-                            else:
-                                raise ScriptSyntaxError(f"Invalid variable: {var_name}, line_no: {line_no}", -2)
-                    var_value = data
-                    if isinstance(var_value, list):
-                        if any(condition_value == item for item in var_value):
-                            self.parse_value(then_part, line_no)
-                    else:
-                        if isinstance(condition_value, int):
-                            if condition_value == var_value:
-                                self.parse_line(then_part, line_no)
-                        else:
-                            if condition_value in str(var_value):
-                                self.parse_line(then_part, line_no)
+                    self.get_nested_variables(var_name, condition_value, then_part, line_no)
                 else:
                     if var_name not in self.variables:
                         raise ScriptParserError(f"Requested variable: {var_name} not found, line_no: {line_no}", -1)
@@ -164,23 +189,7 @@ class MalScriptInterpreter(object):
             else:
                 var_name = '!' + var_name
             if "." in var_name:
-                parts = var_name.split(".")
-                var_name = parts[0]
-                keys = parts[1:]
-                data = self.variables[var_name]
-                for key in keys:
-                    if key.startswith("["):
-                        try:
-                            index_number = int(key.split("[")[1].split("]")[0])
-                            data = data[index_number]
-                        except:
-                            raise ScriptSyntaxError(f"Invalid index for variable: {var_name}, line_no: {line_no}", -2)
-                    else:
-                        if key in data.keys():
-                            data = data.get(key)
-                        else:
-                            raise ScriptSyntaxError(f"Invalid variable: {var_name}, line_no: {line_no}", -2)
-                return data
+                return self.get_nested_variables(var_name, None, None, line_no, is_from_ret=True)
             else:
                 if var_name in self.variables:
                     return self.variables[var_name]
