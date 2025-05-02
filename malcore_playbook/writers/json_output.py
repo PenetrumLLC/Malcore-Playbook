@@ -7,6 +7,8 @@ import json
 
 
 def output(out, filename):
+    if not isinstance(out, dict):
+        out = {"output": out}
     with open(filename, 'w') as fh:
         json.dump(out, fh, indent=4)
     return filename

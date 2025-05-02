@@ -61,11 +61,15 @@ RECIPE-NAME   # Execute this recipe name
 ;             # End the line
 ```
 
-### Example Script
+### Example Scripts
+
+#### Functionality
+
+This is a basic overview of MalScript that provides decent understanding of functionality
 
 ```bash
 # This is a comment that must also end with: ;
-# Will will set the variable $s to the output of executing the strings recipe ;
+# We will set the variable $s to the output of executing the strings recipe ;
 $s=exec(strings);
 # If we find a string matching GetCurrentProcess in the strings output ;
 # We execute the threat-score recipe and assign the output to variable $t ;
@@ -78,4 +82,17 @@ if str('5.13') in $t.score then $a=exec(ai-class);
 if str('safe') in $a then $e=exec(exif-data);
 # Then we will return the code_signature JSON variable from the exif-data output ;
 ret($e.code_signature);
+```
+
+#### Check Code Signing
+
+This is an example of checking if a script has a signing certificate in it
+
+```bash
+# We will first create an execution for exif-data and put the results in the $exif variable ;
+$exif=exec(exif-data);
+# If we find the string 'Microsoft' in the $exif.signature_info output classify the file ;
+if str('Microsoft') in $exif.signature_info then $ai=exec(ai-class);
+# Return the classification
+ret($ai);
 ```
