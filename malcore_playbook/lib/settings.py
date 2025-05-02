@@ -418,7 +418,15 @@ def check_is_trial():
 def execute_chain(script, filename, **kwargs):
     """ execute the MalScript """
     if os.path.exists(script):
-        exec_script = open(script).read()
+        extension = os.path.splitext(script)[1]
+        acceptable_extensions = (".mals", ".mal", ".ms")
+        if any(extension == e for e in list(acceptable_extensions)):
+            exec_script = open(script).read()
+        else:
+            raise chain_script.InvalidScriptPassed(
+                f"Script extension is unverifiable (not any of: {', '.join(list(acceptable_extensions))}), "
+                f"will not execute the script"
+            )
     else:
         exec_script = script
     return chain_script.run(exec_script, filename, kwargs)

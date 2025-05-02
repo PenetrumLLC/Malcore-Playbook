@@ -1,4 +1,5 @@
 import re
+import os
 
 import malcore_playbook.execution.recipe_exec as recipe_exec
 import malcore_playbook.lib.settings as settings
@@ -23,6 +24,9 @@ class ScriptParserError(MalScriptParserError): pass
 
 
 class ScriptExecutionError(MalScriptParserError): pass
+
+
+class InvalidScriptPassed(FileNotFoundError): pass
 
 
 class MalScriptInterpreter(object):
@@ -67,33 +71,6 @@ class MalScriptInterpreter(object):
             raise ScriptSyntaxError(
                 f"Unsupported value type: {value}, line_no: {line_no}", -2, line
             )
-
-    def resolve_var_path(self, var_path, line):
-        """
-        Resolves variables with nested dict/list access like $emu.[0].entry_points.[1].apis
-        """
-        parts = re.split(r'\.\[|\]|\.', var_path)
-        parts = [p for p in parts if p not in ('', None)]
-
-        if not parts:
-            raise ScriptParserError(
-                f"Invalid variable path: {var_path}", -1, line
-            )
-
-        base_var = parts[0]
-        if base_var not in self.variables:
-            raise ScriptParserError(
-                f"Base variable {base_var} not found", -1, line
-            )
-
-        value = self.variables[base_var]
-        for part in parts[1:]:
-            if part.isdigit():
-                value = value[int(part)]
-            else:
-                value = value[part]
-
-        return value
 
     def get_nested_variables(self, var_name, condition_value, then_part, line_no, line, **kwargs):
         """ find nested variables data from the script """

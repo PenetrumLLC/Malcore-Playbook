@@ -1,3 +1,4 @@
+import sys
 import argparse
 
 import malcore_playbook.lib.settings as settings
@@ -113,5 +114,22 @@ class Parser(argparse.ArgumentParser):
                 logger.warning(f"Key value pair: {item} will be skipped")
         parsed.kwargs = kwargs_dict
 
+        verify_arguments(parsed)
+
         return parsed
+
+
+def verify_arguments(parsed_args):
+    if parsed_args.useRecipe is not None and parsed_args.useChain:
+        logger.warning("You cannot use a chain and a singular recipe at the same time")
+        sys.exit(1)
+    if parsed_args.filename is None:
+        logger.warning("You have not passed a filename to use for the recipe execution")
+        sys.exit(1)
+    if parsed_args.useChain and parsed_args.chainScript is None:
+        logger.warning("You have selected to use a chain script but have not supplied a MalScript")
+        sys.exit(1)
+    if parsed_args.viewLocal and parsed_args.viewRemote:
+        logger.warning("You cannot view local recipes and remote recipes at the same time")
+        sys.exit(1)
 
