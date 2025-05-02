@@ -1,3 +1,5 @@
+# Malcore Playbook
+
 <p align="center" width="100%"><img src="https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/logos/mcpb.png?raw=true"/></p>
 
 [![Available Recipes](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Frecipes.malcore.io%2Fassets%2Fdbs%2Frecipe-count-badge.json&query=%24.message&style=for-the-badge&label=Available%20recipes)](https://recipes.malcore.io)
