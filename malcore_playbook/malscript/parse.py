@@ -1,5 +1,4 @@
 import re
-import os
 
 import malcore_playbook.execution.recipe_exec as recipe_exec
 import malcore_playbook.lib.settings as settings
