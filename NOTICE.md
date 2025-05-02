@@ -1,4 +1,4 @@
-# NOTICE
+ # NOTICE
 ### Malcore Playbook Licensing Notice
 
 This software is licensed under a dual-licensing model:

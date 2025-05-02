@@ -23,3 +23,4 @@ Commercial Use:
 Any commercial use, including but not limited to use by corporations, governments, or other organizations for profit 
 or in production environments, requires the purchase of a commercial license.
 ```
+ 

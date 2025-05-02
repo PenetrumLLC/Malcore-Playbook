@@ -11,7 +11,7 @@ Key Features:
 - Real-time execution tracing and output handling
 - Full integration with Malcore's API
 - Built for performance, flexibility, and deep analysis insights
-
+ 
 ## Installation
 
 Simply run:
