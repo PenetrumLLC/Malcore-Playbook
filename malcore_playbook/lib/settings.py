@@ -235,7 +235,7 @@ def load_conf():
         return json.load(fh)
 
 
-def display_recipes(recipes):
+def display_recipes(recipes, filter_=None):
     """ display the recipes passed in a pretty format """
     max_display_chars = 25
     col_width = 35
@@ -243,11 +243,19 @@ def display_recipes(recipes):
     print("-" * (len(s) + 10))
     print(s)
     for recipe in recipes:
-        recipe_name = recipe["filename"].split(".")[0]
-        recipe_name = recipe_name[:max_display_chars]
-        version = recipe['version'][:max_display_chars]
-        author = recipe['author'][:max_display_chars]
-        print(f"{recipe_name.ljust(col_width)}{version.ljust(col_width)}{author}")
+        if filter_ is None:
+            recipe_name = recipe["filename"].split(".")[0]
+            recipe_name = recipe_name[:max_display_chars]
+            version = recipe['version'][:max_display_chars]
+            author = recipe['author'][:max_display_chars]
+            print(f"{recipe_name.ljust(col_width)}{version.ljust(col_width)}{author}")
+        else:
+            recipe_name = recipe["filename"].split(".")[0]
+            if filter_ in recipe_name:
+                recipe_name = recipe_name[:max_display_chars]
+                version = recipe['version'][:max_display_chars]
+                author = recipe['author'][:max_display_chars]
+                print(f"{recipe_name.ljust(col_width)}{version.ljust(col_width)}{author}")
     print("-" * (len(s) + 10))
 
 

@@ -40,7 +40,7 @@ class Parser(argparse.ArgumentParser):
 
         chain_flags = parser.add_argument_group("chain related arguments")
         chain_flags.add_argument(
-            "--chain-script", "-S", "--script", "-C", metavar="CHAIN-SCRIPT",
+            "--chain-script", "-s", "--script", "-C", metavar="CHAIN-SCRIPT",
             dest="chainScript", default=None,
             help="Pass either a filename or a raw chain script in order to execute the MalScript chain"
         )
@@ -63,7 +63,14 @@ class Parser(argparse.ArgumentParser):
             dest="downloadRecipe"
         )
         recipe_args.add_argument(
-            "--recipe-updates", metavar="ACTION", help="Check for recipe updates",
+            "--search", "-S", "--search-string",
+            metavar="KEYWORD", default=None,
+            help="Pass a search string to filter the local or remote recipe list",
+            dest="searchString"
+        )
+        recipe_args.add_argument(
+            "--recipe-updates", "--update-recipes", "--updates", "-U",
+            metavar="ACTION", help="Check for recipe updates",
             dest="checkRecipeUpdates", default=None, choices=["check", "download"]
         )
         recipe_args.add_argument(

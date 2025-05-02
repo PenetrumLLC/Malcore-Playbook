@@ -29,7 +29,7 @@ def main():
             logger.info(f"Starting up at: {datetime.datetime.now()}")
         if parser.viewRemote:
             _api = api.Api(only_remote=True)
-            settings.display_recipes(_api.list_recipes())
+            settings.display_recipes(_api.list_recipes(), filter_=parser.searchString)
         elif parser.showVersions:
             interp = ms_parser.MalScriptInterpreter(None)
             print(f"Malcore Playbook version: {settings.VERSION}")
@@ -41,7 +41,7 @@ def main():
                 logger.error("You have not downloaded any recipes, please use the --download-remote flag to start")
             else:
                 dict_ = settings.create_recipe_dict_from_local(files)
-                settings.display_recipes(dict_)
+                settings.display_recipes(dict_, filter_=parser.searchString)
         elif parser.checkRecipeUpdates is not None:
             choice = parser.checkRecipeUpdates
             logger.info(f"Starting to check for recipe updates, action taken: {choice}")
