@@ -32,32 +32,44 @@ git clone https://github.com/PenetrumLLC/Malcore-Playbook.git && \
 ## Usage
 
 ```
-usage: malcore-playbook [-h] [-r RECIPE-NAME [RECIPE-NAME ...]] [--chain-script CHAIN-SCRIPT] [--list-remote] [--list-local] 
-                        [--download-remote RECIPE-NAME [RECIPE-NAME ...]] [--force] [--output OUTPUT-TYPE]
-                        [--filename FILENAME] [--kwargs [KWARGS [KWARGS ...]]] [--hide]
+usage: malcore-playbook --recipe RECIPE[,RECIPE,..] --filename FILE [--chain --script [SCRIPT] 
+                        --kwargs ARG1=VAL1[,ARG2=VAL2,...]]
 
 optional arguments:
   -h, --help            show this help message and exit
+
+required arguments:
   -r RECIPE-NAME [RECIPE-NAME ...], --recipe RECIPE-NAME [RECIPE-NAME ...]
-                        Pass a recipe name to begin the recipe execution, pass multiple with commas IE: recipe1,recipe2,...
+                        Recipes to execute one at a time, pass multiple using a comma seperated list 
+                        (eg, recipe1,recipe2,...)
+  -c, --chain           Pass this to chain recipes together with a script, must pass the --script flag with this
+  --filename FILENAME, -f FILENAME, --file-to-analyze FILENAME
+                        The filename that you want to process with the recipes. This is required for the recipes to work
+
+chain related arguments:
   --chain-script CHAIN-SCRIPT, -S CHAIN-SCRIPT, --script CHAIN-SCRIPT, -C CHAIN-SCRIPT
-                        Pass either a filename or a chain script
+                        Pass either a filename or a raw chain script in order to execute the MalScript chain
+
+recipe related arguments:
   --list-remote, --list-remote-recipes, -lR
                         List all remote recipes that are available for download
   --list-local, --list-local-recipes, -lL
                         List all local recipes that are available to execute
   --download-remote RECIPE-NAME [RECIPE-NAME ...], --download-recipe RECIPE-NAME [RECIPE-NAME ...], 
-                                                   --download RECIPE-NAME [RECIPE-NAME ...], -D RECIPE-NAME [RECIPE-NAME ...]
-                        Pass a remote recipe name to download it to your recipe folder (pass 'all' to download all available recipes)
+  --download RECIPE-NAME [RECIPE-NAME ...], -D RECIPE-NAME [RECIPE-NAME ...]
+                        Pass a remote recipe name to download it to your recipe folder 
+                        (pass 'all' to download all available recipes)
+  --recipe-updates ACTION
+                        Check for recipe updates
+  --kwargs [KWARGS [KWARGS ...]]
+                        Key and value pairs to pass to the recipe IE: arg1=var1,arg2=var2
+
+misc arguments:
   --force               Force actions that would otherwise fail
   --output OUTPUT-TYPE, -O OUTPUT-TYPE, --output-type OUTPUT-TYPE
                         Pass to control the type of output you want, default is JSON files stored in: C:\Users\saman\.mcpb
-  --filename FILENAME, -f FILENAME, --file-to-analyze FILENAME
-                        Filename for the recipes to process
-  --kwargs [KWARGS [KWARGS ...]]
-                        Key and value pairs to pass to the recipe IE: arg1=var1,arg2=var2
   --hide                Hide the banner
-
+  --version             Show version numbers and exit
 ```
 
 ## MalScript Overview
