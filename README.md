@@ -1,4 +1,4 @@
-<p align="center" width="100%"><img src=".github/assets/logos/mcpb.png"/></p>
+<p align="center" width="100%"><img src="https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/logos/mcpb.png?raw=true"/></p>
 
 Malcore Playbook is a powerful framework for automating malware analysis, malware triaging, and analyst workflows using modular recipes and scripting. Designed for SOC analysts, threat hunters, and cybersecurity professionals, Malcore Playbook allows users to build chains to automate workflows, and extract actionable intelligence from suspicious files through a simple, flexible scripting language, and individual recipes.
 
@@ -14,7 +14,13 @@ Key Features:
 
 ## Installation
 
-For now, you will have to perform a manual installation like so:
+Simply run:
+
+```shell
+pip install malcore-playbook
+```
+
+Or, you can manually install like so:
 
 ```shell
 git clone https://github.com/PenetrumLLC/Malcore-Playbook.git && \
@@ -56,7 +62,7 @@ optional arguments:
 
 ## MalScript Overview
 
-<p align="center" width="100%"><img height="201" width="474" src=".github/assets/logos/malscript_logo.png"/></p>
+<p align="center" width="100%"><img height="201" width="474" src="https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/logos/malscript_logo.png?raw=true"/></p>
 
 MalScript is a domain-specific scripting language (DSL) built specifically for the Malcore Playbook. This language is designed to automate malware analysis and file triaging workflows. By providing the ability to chain recipes and execute them conditionally, MalScript provides a powerful declarative automation to help automate reverse engineers and analysts. MalScript combines function and imperative elements to support rule-based execution, and data inspection on real-time analysis results.
 
