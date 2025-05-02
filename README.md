@@ -1,5 +1,9 @@
 <p align="center" width="100%"><img src="https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/logos/mcpb.png?raw=true"/></p>
 
+![Available Recipes](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Frecipes.malcore.io%2Fassets%2Fdbs%2Frecipe-count-badge.json&query=%24.message&style=for-the-badge&label=Available%20recipes&link=https%3A%2F%2Frecipes.malcore.io)
+![MalScript Docs](https://img.shields.io/badge/MalScript%20Documentation-red?style=for-the-badge&link=https%3A%2F%2Fgithub.com%2FPenetrumLLC%2FMalcore-Playbook%2Fblob%2Fmaster%2F.github%2Fdocs%2Fmalscript_docs.md)
+![Build Recipe](https://img.shields.io/badge/Build%20A%20Recipe-blue?style=for-the-badge&link=https%3A%2F%2Fgithub.com%2FPenetrumLLC%2FMalcore-Playbook-Recipes)
+
 Malcore Playbook is a powerful framework for automating malware analysis, malware triaging, and analyst workflows using modular recipes and scripting. Designed for SOC analysts, threat hunters, and cybersecurity professionals, Malcore Playbook allows users to build chains to automate workflows, and extract actionable intelligence from suspicious files through a simple, flexible scripting language, and individual recipes.
 
 With its recipe system, real-time variable tracking, and conditional logic engine, Malcore Playbook transforms analyst tasks in an easily scriptable solution. Whether you're investigating advanced persistent threats (APTs), or building automated triage pipelines, Malcore Playbook gives you full control — without sacrificing speed, precision, or customization.
