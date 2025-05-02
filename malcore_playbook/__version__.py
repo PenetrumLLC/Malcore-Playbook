@@ -5,7 +5,7 @@
 #
 
 # major.minor.patch.commit
-VERSION = "1.0.3.4"
+VERSION = "1.0.4.5"
 # alias for the version
 VERSION_ALIAS = "storm"
 # version string

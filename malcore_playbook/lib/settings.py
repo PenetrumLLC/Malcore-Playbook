@@ -496,7 +496,7 @@ def check_for_recipe_updates(force_download=False):
 
 
 def check_for_updates():
-    """ check the installation method of the program """
+    """ checks if the program is up to date or not """
     try:
         current_version = VERSION
         url = f"https://pypi.org/pypi/malcore-playbook/json"
