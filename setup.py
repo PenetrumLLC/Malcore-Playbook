@@ -11,7 +11,7 @@ if __name__ == "__main__":
                     'and analyst workflows using modular recipes and DSL scripting',
         author="Thomas Perkins",
         author_email="penetrumcorp@gmail.com",
-        install_requires=[l.strip() for l in open("requirements.txt").read().splitlines()],
+        install_requires=["requests"],
         long_description=open("README.md").read(),
         long_description_content_type="text/markdown",
         url="https://github.com/PenetrumLLC/malcore-playbook",
