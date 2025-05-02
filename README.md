@@ -87,14 +87,14 @@ Full language documentation can be found [HERE](.github/docs/malscript_docs.md)
 ## Example Usage
 
 The help menu:
-![Help Menu](.github/assets/examples/help_menu.png)
+![Help Menu](https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/examples/help_menu.png?raw=true)
 
 Executing a single recipe
-![Single Recipe](.github/assets/examples/single-recipe.png)
+![Single Recipe](https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/examples/single-recipe.png?raw=true)
 
 Downloading recipes:
-![Download Recipes](.github/assets/examples/download_recipes.png)
+![Download Recipes](https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/examples/download_recipes.png?raw=true)
 
 
 Executing a recipe chain and saving it to a text file:
-![Download Recipes](.github/assets/examples/recipe_chain_saved.png)
+![Download Recipes](https://github.com/PenetrumLLC/Malcore-Playbook/blob/master/.github/assets/examples/recipe_chain_saved.png?raw=true)
