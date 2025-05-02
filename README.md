@@ -18,13 +18,17 @@ Key Features:
  
 ## Installation
 
-Simply run:
+It is advised to use the this method for installation:
 
 ```shell
 pip install malcore-playbook
 ```
 
-Or, you can manually install like so:
+Then you can easily update by running: `pip install malcore-playbook --upgrade`
+
+---
+
+You are also able to install manually like so:
 
 ```shell
 git clone https://github.com/PenetrumLLC/Malcore-Playbook.git && \
