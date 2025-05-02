@@ -6,16 +6,6 @@
 
 Malcore Playbook is a powerful framework for automating malware analysis, malware triaging, and analyst workflows using modular recipes and scripting. Designed for SOC analysts, threat hunters, and cybersecurity professionals, Malcore Playbook allows users to build chains to automate workflows, and extract actionable intelligence from suspicious files through a simple, flexible scripting language, and individual recipes.
 
-With its recipe system, real-time variable tracking, and conditional logic engine, Malcore Playbook transforms analyst tasks in an easily scriptable solution. Whether you're investigating advanced persistent threats (APTs), or building automated triage pipelines, Malcore Playbook gives you full control — without sacrificing speed, precision, or customization.
-
-Key Features:
-
-- Modular scriptable engine using "MalScript" syntax
-- Analysis chaining and conditional logic
-- Real-time execution tracing and output handling
-- Full integration with Malcore's API
-- Built for performance, flexibility, and deep analysis insights
- 
 ## Installation
 
 It is advised to use the this method for installation:
