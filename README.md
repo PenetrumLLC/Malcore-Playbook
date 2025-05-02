@@ -89,6 +89,8 @@ Full language documentation can be found [HERE](.github/docs/malscript_docs.md)
 The help menu:
 ![Help Menu](.github/assets/examples/help_menu.png)
 
+Executing a single recipe
+![Single Recipe](.github/assets/examples/single-recipe.png)
 
 Downloading recipes:
 ![Download Recipes](.github/assets/examples/download_recipes.png)
