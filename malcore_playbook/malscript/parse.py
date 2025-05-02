@@ -1,3 +1,9 @@
+#  Copyright (c) 2025.
+#  Penetrum LLC (all rights reserved)
+#  Copyright last updated: 5/2/25, 10:29 AM
+#
+#
+
 import re
 
 import malcore_playbook.execution.recipe_exec as recipe_exec
