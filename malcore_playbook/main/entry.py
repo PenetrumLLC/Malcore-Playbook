@@ -32,6 +32,7 @@ def main():
             print(settings.HEADER)
         if parser.noStartEnd:
             logger.info(f"Starting up at: {datetime.datetime.now()}")
+        settings.check_for_updates()
         if parser.viewRemote:
             _api = api.Api(only_remote=True)
             settings.display_recipes(_api.list_recipes(), filter_=parser.searchString)

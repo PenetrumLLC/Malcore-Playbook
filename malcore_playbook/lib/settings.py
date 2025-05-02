@@ -12,6 +12,7 @@ import logging
 import datetime
 import hashlib
 from logging.handlers import RotatingFileHandler
+from importlib.metadata import distribution
 
 import malcore_playbook.writers.json_output as json_writer
 import malcore_playbook.writers.pdf_output as pdf_writer
@@ -492,3 +493,16 @@ def check_for_recipe_updates(force_download=False):
     else:
         logger.warning(f"There are a total of {total_needed} recipe(s) that require an update")
 
+
+def check_for_updates():
+    """ check the installation method of the program """
+    try:
+        current_version = VERSION
+        url = f"https://pypi.org/pypi/malcore-playbook/json"
+        req = requests.get(url, timeout=3)
+        data = req.json()
+        newest_version = data['info']['version']
+        if current_version < newest_version:
+            logger.warning(f"New version available, it is highly suggested that you update to version: {newest_version}")
+    except:
+        logger.warning("Unable to check for a newer version")
